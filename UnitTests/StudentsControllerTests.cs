@@ -3,7 +3,6 @@ using GPA_Calculator.Db;
 using GPA_Calculator.Models;
 using GPA_Calculator.Services;
 using Microsoft.AspNetCore.Http.HttpResults;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Xunit;
 using Xunit.Abstractions;
@@ -12,9 +11,9 @@ namespace GPA_Calculator.UnitTests;
 
 public class StudentsControllerTests
 {
-    private readonly ITestOutputHelper _testOutputHelper;
     private readonly StudentGradesContext _context;
     private readonly StudentsController _controller;
+    private readonly ITestOutputHelper _testOutputHelper;
 
     public StudentsControllerTests(ITestOutputHelper testOutputHelper)
     {
@@ -58,13 +57,13 @@ public class StudentsControllerTests
         Assert.IsType<double>(result.Value);
         Assert.Equal(86.67, result.Value, 2);
     }*/
-    
+
     [Fact]
     public async void TestGetStudentGPA_SubjectsAreSavedSuccessfully()
     {
 // Arrange
         const int studentId = 1;
-        
+
         var subject1 = new Subject { Id = 1, Name = "Math", Credits = 3 };
         var subject2 = new Subject { Id = 2, Name = "History", Credits = 4 };
         var subject3 = new Subject { Id = 3, Name = "Physics", Credits = 5 };
@@ -78,13 +77,13 @@ public class StudentsControllerTests
 // Assert
         Assert.Equal(3, _context.Subjects.Count());
     }
-    
+
     [Fact]
     public async void TestGetStudentGPA_GradesAreSavedSuccessfully()
     {
 // Arrange
         const int studentId = 1;
-        
+
         var subject1 = new Subject { Id = 1, Name = "Math", Credits = 3 };
         var subject2 = new Subject { Id = 2, Name = "History", Credits = 4 };
         var subject3 = new Subject { Id = 3, Name = "Physics", Credits = 5 };
@@ -115,11 +114,8 @@ public class StudentsControllerTests
 
         Assert.Equal(3, _context.Grades.Count());
     }
-    
-    
-    
-    
-    
+
+
     [Fact]
     public async void TestGetStudentGPA_CalculateGPA()
     {
@@ -132,10 +128,7 @@ public class StudentsControllerTests
         Assert.IsType<double>(result);
         Assert.Equal(86.67, result, 2);
     }
-    
-    
-    
-    
+
 
     [Fact]
     public async void TestGetStudentGPA_InvalidStudentId_ReturnsNotFound()

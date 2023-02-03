@@ -31,7 +31,7 @@ public class StudentsController : ControllerBase
     [Route("/subjects")]
     [HttpPost]
     public async Task<ActionResult<Subject>> RegisterSubject(Subject subject)
-    { 
+    {
         _context.Subjects.Add(subject);
         await _context.SaveChangesAsync();
         return Ok(subject);
@@ -92,10 +92,10 @@ public class StudentsController : ControllerBase
     //     var GPA = totalScore / totalCredits;
     //     return Ok(GPA);
     // }
-    
-    
-    
-    
+
+
+    //         Not Async
+
     // [Route("/students/{studentId}/gpa")]
     // [HttpGet]
     // public ActionResult<double> GetStudentGPA(int studentId)
@@ -129,14 +129,14 @@ public class StudentsController : ControllerBase
     //
     //     return Ok(gpa);
     // }
-    
+
     [Route("/students/{studentId}/gpa")]
     [HttpGet]
     public async Task<double> GetStudentGPA(int studentId)
     {
         // Load the grades for the specified student
         var grades = await _context.Grades.Where(g => g.StudentId == studentId).ToListAsync();
-        
+
         // Convert the grades to the Wentworth scale
         var totalScore = 0.0;
         var totalCredits = 0;
