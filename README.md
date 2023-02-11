@@ -1,23 +1,19 @@
-# GPA კალკულატორი
+# GPA calculator
 
-შექმენით API, რომლითაც შესაძლებელი იქნება სტუდენტების რეგისტრაცია, მათთვის შეფასებების დამატება და GPA-ის გამოთვლა.
+Create an API to register students, add grades to them, and calculate GPA.
 
-API-ს უნდა ქჰონდეს შემდეგი endpoint-ები:
+The API must have the following endpoints:
 
-1. POST /student - სტუდენტის რეგისტრაცია (სახელი, გვარი, პირადი ნომერი, კურსი)
-2. POST /subject - საგანის რეგისტრაცია (საგანის სახელი, კრედიტების რაოდენობა)
-3. POST /student/{studentId}/grade - სტუდენტისთვის შეფასების დამატება (საგანის Id, ქულა 0-დან 100-მდე)
-4. GET /student/{studentId}/grades - სტუდენტის შეფასებების სიის ამოღება
-5. GET /student/{studentId}/gpa - სტუდენტის GPA-ის გამოთვლა
+1. POST /student - student registration (name, surname, personal number, course)
+2. POST /subject - subject registration (subject name, number of credits)
+3. POST /student/{studentId}/grade - adding a grade for the student (subject Id, score from 0 to 100)
+4. GET /student/{studentId}/grades - extracting the list of student grades
+5. GET /student/{studentId}/gpa - calculate the student's GPA
 
-GPA-ის გამოსათვლელ ფუნქციას უნდა ჰქონდეს Unit test-ები.
+The GPA calculation function should have unit tests.
 
-GPA-ის გამოსათვლელი ფორმულა იხ.
+### Statistics
 
-[როგორ გამოითვლება GPA?! | Studinfo.ge - სტუდენტური ამბები](https://studinfo.ge/2015/03/23/rogor-gamoitvleba-gpa/)
-
-### სტატისტიკა
-
-1. top 10 ყველაზე მაღალი GPA-ს მქონე სტუდენტი
-2. top 3 საგანი, რომელშიც საშუალოდ ყველაზე მეტ ქულას იღებენ სტუდენტები
-3. top 3 საგანი, რომელშიც საშუალოდ ყველაზე ნაკლებ ქულას იღებენ სტუდენტები
+1. Top 10 students with the highest GPA
+2. Top 3 subjects in which students get the most points on average
+3. Top 3 subjects in which students get the least points on average
