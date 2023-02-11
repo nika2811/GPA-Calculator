@@ -55,13 +55,16 @@ public class StudentsController : ControllerBase
             .Include(g => g.Subject)
             .ToListAsync();
 
+        if (!grades.Any()) return NotFound("No grades found for the specified student");
+
         return grades;
     }
 
     [Route("/students/{studentId}/gpa")]
     [HttpGet]
-    public async Task GetStudentGpa(int studentId)
+    public async Task<ActionResult<double>> GetStudentGpa(int studentId)
     {
-        await _calculator.Calculate(studentId);
+        var gpa = await _calculator.Calculate(studentId);
+        return Ok(gpa);
     }
 }
