@@ -12,11 +12,13 @@ public class StudentsController : ControllerBase
 {
     private readonly GpaCalculator _calculator;
     private readonly StudentGradesContext _context;
+    private readonly SubjectScores _subjectScores;
 
-    public StudentsController(StudentGradesContext context, GpaCalculator calculator)
+    public StudentsController(StudentGradesContext context, GpaCalculator calculator, SubjectScores subjectScores)
     {
         _context = context;
         _calculator = calculator;
+        _subjectScores = subjectScores;
     }
 
     [Route("students")]
@@ -64,7 +66,60 @@ public class StudentsController : ControllerBase
     [HttpGet]
     public async Task<ActionResult<double>> GetStudentGpa(int studentId)
     {
-        var gpa = await _calculator.Calculate(studentId);
-        return Ok(gpa);
+        var student = await _context.Students.FirstOrDefaultAsync(s => s.Id == studentId);
+        if (student == null) return NotFound("Student not found");
+
+        student.GPA = await _calculator.Calculate(studentId);
+        _context.Students.Update(student);
+        await _context.SaveChangesAsync();
+
+        return Ok(student.GPA);
+    }
+
+
+    [Route("/top10")]
+    [HttpGet]
+    public async Task<ActionResult<IEnumerable<Student>>> GetTop10()
+    {
+        var top10 = await _context.Students
+            .OrderByDescending(s => s.GPA)
+            .Take(10)
+            .ToListAsync();
+
+        return top10;
+    }
+
+    [Route("api/subjects/top3")]
+    [HttpGet]
+    public async Task<ActionResult<IEnumerable<Subject>>> GetTop3Subjects()
+    {
+        var grades = await _context.Grades.ToListAsync();
+        var subjects = await _context.Subjects.ToListAsync();
+
+        var gradeCalculator = new GradeCalculator();
+        var top3Subjects = gradeCalculator.GetTop3Subjects(grades, subjects);
+
+        if (top3Subjects == null || top3Subjects.Count == 0) return NotFound();
+
+        return top3Subjects;
+    }
+
+
+    [Route("api/subjects/bottom3")]
+    [HttpGet]
+    public async Task<ActionResult<IEnumerable<Subject>>> GetBottom3Subjects()
+    {
+        var grades = await _context.Grades.ToListAsync();
+        var subjects = await _context.Subjects.ToListAsync();
+
+        var subjectScores = _subjectScores.GetSubjectScores(grades, subjects);
+
+        var bottom3Subjects = subjectScores
+            .OrderBy(x => x.Value)
+            .Take(3)
+            .Select(x => subjects.FirstOrDefault(s => s.Id == x.Key))
+            .ToList();
+
+        return Ok(bottom3Subjects);
     }
 }

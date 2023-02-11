@@ -8,4 +8,5 @@ public class Student
     public string PersonalNumber { get; set; }
     public string Course { get; set; }
     public List<Grade> Grades { get; set; }
+    public double GPA { get; set; }
 }

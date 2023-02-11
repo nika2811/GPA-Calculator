@@ -13,6 +13,8 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<StudentGradesContext>(
     c => c.UseSqlServer(builder.Configuration["AppDbContextConnection"]));
 builder.Services.AddTransient<GpaCalculator>();
+builder.Services.AddTransient<GradeCalculator>();
+builder.Services.AddTransient<SubjectScores>();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
