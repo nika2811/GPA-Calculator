@@ -5,6 +5,13 @@ namespace GPA_Calculator.UnitTests;
 
 public class GPA_CalculatorTests
 {
+    private readonly UnitTestFunctions _unitTestFunctions;
+
+    public GPA_CalculatorTests(UnitTestFunctions unitTestFunctions)
+    {
+        _unitTestFunctions = unitTestFunctions;
+    }
+
     [Fact]
     public async Task Calculate_ValidStudentId_ReturnsGPA()
     {
@@ -25,44 +32,9 @@ public class GPA_CalculatorTests
 
 
         // Act
-        var gpa = await Calculate(grades, subjects);
+        var gpa = await _unitTestFunctions.Calculate(grades, subjects);
 
         // Assert
         Assert.Equal(3.22, gpa, 2);
-    }
-
-
-    public Task<double> Calculate(List<Grade> grades, List<Subject> subjects)
-    {
-        if (grades == null || grades.Count == 0) throw new KeyNotFoundException("Grades not found");
-        var totalScore = 0.0;
-        var totalCredits = 0;
-        foreach (var grade in grades)
-        {
-            var subject = subjects.FirstOrDefault(s => s.Id == grade.SubjectId);
-            var score = ConvertToWentworthScale(grade.Score);
-            if (subject != null)
-            {
-                totalScore += score * subject.Credits;
-                totalCredits += subject.Credits;
-            }
-        }
-
-        return Task.FromResult(totalScore / totalCredits);
-    }
-
-    private static double ConvertToWentworthScale(int score)
-    {
-        if (score >= 90)
-            return 4;
-        if (score >= 80)
-            return 3;
-        if (score >= 70)
-            return 2;
-        if (score >= 60)
-            return 1;
-        if (score >= 51)
-            return 0.5;
-        return 0;
     }
 }
